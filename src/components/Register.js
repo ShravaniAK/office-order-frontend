@@ -1,37 +1,31 @@
-import React, { useState } from 'react';
-
-const apiLink = 'https://oom.onrender.com/auth/register';
+import React, { useState } from "react";
+import axios from "axios";
+import './register.css';
+import {Link} from 'react-router-dom';
 
 function Register() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [visibility, setVisibility] = useState([]);
-  const [message, setMessage] = useState(null);
 
-  async function handleSubmit(event) {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-
     try {
-      const response = await fetch(apiLink, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password, visibility }),
+      const response = await axios.post("https://oom.onrender.com/auth/register", {
+        email,
+        password,
+        visibility,
       });
-
-      if (!response.ok) {
-        throw new Error(`Request failed with status code ${response.status}`);
-      }
-
-      const data = await response.json();
-      setMessage(data.message);
+      console.log(response.data);
     } catch (error) {
-      setMessage(error.message);
+      console.error(error);
     }
-  }
+  };
 
   return (
+      <div className="register">
+
+     
     <form onSubmit={handleSubmit}>
       <div>
         <label htmlFor="email">Email:</label>
@@ -56,13 +50,14 @@ function Register() {
         <input
           type="text"
           id="visibility"
-          value={visibility.join(',')}
-          onChange={(event) => setVisibility(event.target.value.split(','))}
+          value={visibility}
+          onChange={(event) => setVisibility(event.target.value.split(","))}
         />
       </div>
       <button type="submit">Submit</button>
-      {message && <div>{message}</div>}
     </form>
+    <Link to="/Login">Login</Link>
+    </div>
   );
 }
 
