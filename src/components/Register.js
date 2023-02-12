@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import axios from "axios";
 import './register.css';
 import {Link} from 'react-router-dom';
+import { Navigate } from "react-router-dom";
 
 function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [visibility, setVisibility] = useState([]);
+  const [redirect, setRedirect] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -20,7 +22,14 @@ function Register() {
     } catch (error) {
       console.error(error);
     }
+
+    setRedirect(true);
   };
+
+  if (redirect) {
+    return <Navigate to="/Home" />;
+  }
+
 
   return (
       <div className="register">
